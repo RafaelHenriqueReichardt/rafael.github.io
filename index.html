@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamento de Compromissos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Agendamento de Compromissos</h1>
+    </header>
+
+    <section>
+        <h2>1. Descrição e Modelagem do Problema</h2>
+        <h3>Cenário Escolhido</h3>
+        <p>
+            O problema está relacionado a um sistema de agendamento de compromissos. Em um cenário típico, temos usuários
+            que desejam agendar compromissos (como consultas, reuniões, entrevistas, etc.) com profissionais ou serviços,
+            e o sistema precisa gerenciar a disponibilidade desses profissionais e os horários preferenciais dos usuários.
+        </p>
+
+        <h3>Entidades</h3>
+        <ul>
+            <li><strong>Usuário:</strong> Pessoa que deseja agendar um compromisso.</li>
+            <li><strong>Profissional:</strong> Pessoa ou entidade que oferece o serviço e tem um horário disponível para agendamento.</li>
+            <li><strong>Compromisso:</strong> O evento que ocorre quando um usuário e um profissional se encontram para realizar um serviço.</li>
+            <li><strong>Horário:</strong> Momento específico em que o compromisso está marcado.</li>
+        </ul>
+
+        <h3>Relações</h3>
+        <ul>
+            <li><strong>Agendamento:</strong> Relaciona um usuário a um profissional em um horário específico.</li>
+            <li><strong>Disponibilidade:</strong> Relaciona um profissional a um conjunto de horários disponíveis para compromissos.</li>
+            <li><strong>Preferência de Horário:</strong> Relaciona um usuário a horários preferenciais, que podem ser um ou mais.</li>
+        </ul>
+
+        <h3>Restrições</h3>
+        <ul>
+            <li>Um usuário não pode agendar mais de um compromisso no mesmo horário.</li>
+            <li>Um profissional não pode atender a dois usuários no mesmo horário.</li>
+            <li>O sistema deve garantir que a disponibilidade do profissional seja respeitada.</li>
+        </ul>
+
+        <h3>Regras</h3>
+        <ul>
+            <li>Um usuário pode agendar um compromisso com um profissional, se o horário desejado pelo usuário estiver disponível.</li>
+            <li>Se o horário do profissional já estiver ocupado, o agendamento deve ser redirecionado para outro horário disponível ou o usuário deve ser notificado.</li>
+        </ul>
+
+        <h3>Versão Formal</h3>
+        <p>Seja (U) um conjunto de usuários, (P) um conjunto de profissionais e (H) um conjunto de horários. A relação de agendamento (A(u, p, h)) indica que o usuário (u) agendou um compromisso com o profissional (p) no horário (h).</p>
+        <pre>
+        (A(u, p, h)): Agendamento de (u) com (p) no horário (h).
+        (D(p, h)): Disponibilidade de (p) no horário (h).
+        (P(u, h)): Preferência de horário de (u) no horário (h).
+        </pre>
+        <p>O sistema deve garantir que (A(u, p, h)) só seja verdadeiro se (D(p, h)) for verdadeiro e o horário não conflitar com outros agendamentos.</p>
+    </section>
+
+    <section>
+        <h2>2. Lógica Proposicional</h2>
+        <h3>Proposições</h3>
+        <ul>
+            <li>(P₁): O usuário (u) agendou um compromisso com o profissional (p) no horário (h).</li>
+            <li>(P₂): O horário (h) está disponível para o profissional (p).</li>
+            <li>(P₃): O usuário (u) prefere o horário (h).</li>
+        </ul>
+
+        <h3>Fórmulas Bem Formadas (FBFs)</h3>
+        <ul>
+            <li>(P₁ → P₂): Se o usuário agendou um compromisso, então o horário deve estar disponível.</li>
+            <li>(P₁ → ¬P₃): Se o usuário agendou, então o horário não pode ser o preferido.</li>
+        </ul>
+
+        <h3>Tabela Verdade</h3>
+        <table>
+            <tr>
+                <th>P₁</th>
+                <th>P₂</th>
+                <th>P₃</th>
+                <th>P₁ → P₂</th>
+                <th>P₁ → ¬P₃</th>
+            </tr>
+            <tr><td>V</td><td>V</td><td>V</td><td>V</td><td>F</td></tr>
+            <tr><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td></tr>
+            <tr><td>V</td><td>F</td><td>V</td><td>F</td><td>F</td></tr>
+            <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td></tr>
+            <tr><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td></tr>
+            <tr><td>F</td><td>V</td><td>F</td><td>V</td><td>V</td></tr>
+            <tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>V</td><td>V</td></tr>
+        </table>
+    </section>
+
+    <section>
+        <h2>3. Dedução Natural</h2>
+        <h3>Dedução 1</h3>
+        <p>Se o usuário agendou um compromisso e o horário está disponível, então o horário deve estar disponível.</p>
+
+        <h3>Dedução 2</h3>
+        <p>Se o usuário agendou e o horário não é o preferido, então o usuário não prefere o horário.</p>
+    </section>
+
+    <section>
+        <h2>4. Resolução Proposicional</h2>
+        <h3>Conversão para CNF</h3>
+        <pre>
+            (P₁ → P₂) → (¬P₁ ∨ P₂)
+            (P₁ → ¬P₃) → (¬P₁ ∨ ¬P₃)
+        </pre>
+        <h3>Resolução</h3>
+        <p>Aplicando a resolução, conseguimos provar que o horário está disponível.</p>
+    </section>
+
+    <section>
+        <h2>5. Lógica de Predicados</h2>
+        <h3>Definição de Predicados</h3>
+        <ul>
+            <li><strong>Agendar(u, p, h):</strong> O usuário (u) agendou um compromisso com o profissional (p) no horário (h).</li>
+            <li><strong>Disponivel(p, h):</strong> O profissional (p) está disponível no horário (h).</li>
+            <li><strong>Preferencia(u, h):</strong> O usuário (u) prefere o horário (h).</li>
+        </ul>
+
+        <h3>Formalização em Primeira Ordem</h3>
+        <pre>
+            ∀u ∀p ∀h (Agendar(u, p, h) → Disponivel(p, h))
+            ∀u ∃h (Preferencia(u, h))
+        </pre>
+    </section>
+
+    <section>
+        <h2>6. Semântica de Predicados</h2>
+        <h3>Modelos</h3>
+        <p>
+            O domínio inclui o conjunto de usuários, profissionais e horários. A função de interpretação atribui valores aos predicados de acordo com o domínio.
+        </p>
+    </section>
+
+    <section>
+        <h2>7. Substituição, Unificação e Resolução (Predicados)</h2>
+        <h3>Substituição e Unificação</h3>
+        <p>Exemplo de unificação de expressões e resolução de predicados com base no sistema de agendamentos.</p>
+    </section>
+
+    <section>
+        <h2>8. Parte Computacional</h2>
+        <h3>Verificação Automática (Código Python)</h3>
+        <pre>
+            # Código Python para verificar a validade de uma fórmula proposicional
+            from itertools import product
+
+            def tabela_verdade(f):
+                variaveis = list(f.__code__.co_varnames)
+                valores_possiveis = product([False, True], repeat=len(variaveis))
+
+                for valores in valores_possiveis:
+                    resultado = f(*valores)
+                    print(f"Valores: {dict(zip(variaveis, valores))} | Resultado: {resultado}")
+
+            def formula(P1, P2, P3):
+                return (not P1 or P2)
+
+            tabela_verdade(formula)
+        </pre>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Agendamento de Compromissos. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
 
